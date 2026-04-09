@@ -3,13 +3,7 @@
 
 class MockBoard : public IBoard {
     public:
-        void setPinHigh(int pin) override {
-            std::cout << " [MOCK HW] Pin" << pin << "-> HIGH\n";
-        }
-        void setPinLow(int pin) override {
-            std::cout << " [MOCK HW] Pin" << pin << "-> LOW\n";
-        }
-        void setPWM(int pin, int value) override {
-            std::cout << " [MOCK HW] Pin" << pin << "-> PWM" << value << "\n";
-        }
+        void setPinHigh(int pin) override; 
+        void setPinLow(int pin) override;
+        void setPWM(int pin, int value) override;
 };
