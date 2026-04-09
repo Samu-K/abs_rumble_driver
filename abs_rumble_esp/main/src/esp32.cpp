@@ -1,5 +1,7 @@
 #include "esp32.h"
 
+#include "driver/ledc.h"
+
 ESP32Board::ESP32Board(gpio_num_t in1, gpio_num_t in2, gpio_num_t ena) {
     gpio_config_t io_conf = {};
     io_conf.intr_type = GPIO_INTR_DISABLE;
@@ -23,7 +25,6 @@ ESP32Board::ESP32Board(gpio_num_t in1, gpio_num_t in2, gpio_num_t ena) {
     ledc_channel.speed_mode = LEDC_LOW_SPEED_MODE;
     ledc_channel.sleep_mode = LEDC_SLEEP_MODE_NO_ALIVE_NO_PD;
     ledc_channel.channel = LEDC_CHANNEL_0;
-    ledc_channel.intr_type = LEDC_INTR_DISABLE;
     ledc_channel.timer_sel = LEDC_TIMER_0;
     ledc_channel.duty = 0;
     ledc_channel.hpoint = 0;

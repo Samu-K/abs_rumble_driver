@@ -1,5 +1,7 @@
 #include "motor.h" 
 
+#include <iostream>
+
 Motor::Motor(IBoard* hardwareBoard, int ena, int in1, int in2) : board(hardwareBoard), enaPin(ena), in1Pin(in1), in2Pin(in2), isSpinning(false) {}
 
 void Motor::setVibrationSpeed(int pwmValue) {

@@ -1,11 +1,6 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include <iostream>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <cstring>
 #include "board.h"
 
 class Motor {

@@ -1,6 +1,5 @@
 #include "board.h"
 #include "driver/gpio.h"
-#include "driver/ledc.h"
 
 class ESP32Board : public IBoard {
     public:

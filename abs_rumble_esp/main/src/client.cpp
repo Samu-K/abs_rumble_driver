@@ -2,6 +2,11 @@
 #include "motor.h"
 #include "esp32.h"
 
+#include <iostream>
+#include <unistd.h>
+#include <cstring>
+#include <arpa/inet.h>
+
 int mapFloatToPwm(float x, float in_min, float in_max, int out_min, int out_max) {
     if (x > in_max) x = in_max;
     return (x-in_min)*(out_max-out_min) / (in_max-in_min)+out_min;

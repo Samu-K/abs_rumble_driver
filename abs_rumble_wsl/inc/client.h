@@ -1,11 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <iostream>
-#include <sys/socket.h>
 #include <arpa/inet.h>
-#include <unistd.h>
-#include <cstring>
 
 // 12-byte Handshake struct mimicking Assetto Corsa 
 struct Handshake {
