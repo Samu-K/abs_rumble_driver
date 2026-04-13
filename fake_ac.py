@@ -38,18 +38,31 @@ def main():
     sock.bind((UDP_IP, UDP_PORT))
 
     print(f"Game sim listening on port {UDP_PORT}")
-    print("Waiting for client handshake")
 
-    # block here until we get handshake
-    # returns the client address from handshake
-    client_addr = handshake_listener(sock)
-
-    t=0
     while True:
-        packet = game_telemetry(t)
-        sock.sendto(packet,client_addr)
+        sock.settimeout(None) # Block until handshake
+        print("Waiting for client handshake")
+        client_addr = handshake_listener(sock)
 
-        time.sleep(0.5)
-        t += 0.1
+        sock.settimeout(0.5) # Act as the game tick delay
+        t=0
+        subscribed = True
+        
+        while subscribed:
+            packet = game_telemetry(t)
+            sock.sendto(packet, client_addr)
 
-main()
+            try:
+                data, addr = sock.recvfrom(1024)
+                if len(data) == 12:
+                    identifier, version, operationId = struct.unpack('iii', data)
+                    if operationId == 2: # 2 for unsubscribe
+                        print(f"Client {addr} unsubscribed.")
+                        subscribed = False
+            except socket.timeout:
+                pass
+
+            t += 0.1
+
+if __name__ == "__main__":
+    main()
