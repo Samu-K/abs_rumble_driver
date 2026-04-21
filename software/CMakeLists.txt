@@ -16,7 +16,7 @@ qt_add_executable(appabs_rumble_gui
     inc/MockSerial.h
 )
 
-target_include_directories(appabs_rumble_gui PRIVATE inc ../abs_rumble_esp/main/inc)
+target_include_directories(appabs_rumble_gui PRIVATE inc ../firmware/components/protocol /opt/qt/6.5.3/gcc_64/include)
 
 qt_add_qml_module(appabs_rumble_gui
     URI abs_rumble_gui

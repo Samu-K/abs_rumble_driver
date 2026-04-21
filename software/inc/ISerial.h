@@ -3,12 +3,9 @@
 
 #include <QString>
 #include <cstdint>
-#include "client.h"
 
-// Packet to send to board over USB
-struct UsbPacket {
-    uint8_t vibration_speed;
-};
+
+#include "protocol.h"
 
 class ISerial {
 public:

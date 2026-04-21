@@ -1,7 +1,6 @@
-
 # Directories
 SRC_DIR = src
-INC_DIR = inc
+INC_DIR = inc -I../../components/motor -I../../components/protocol
 BUILD_DIR = build
 
 # Compiler settings
@@ -12,7 +11,7 @@ CXXFLAGS = -Wall -Wextra -I$(INC_DIR)
 TARGET = client
 
 # Find all .cpp files in the source directory
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard ../../components/motor/*.cpp)
 # Map .cpp files to .o files in the build directory
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRCS))
 

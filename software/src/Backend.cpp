@@ -36,6 +36,7 @@ void Backend::setRumbleIntensity(double value) {
 
 int Backend::mapFloatToPwm(float x, float in_min, float in_max, int out_min, int out_max) {
     if (x > in_max) x = in_max;
+    if (x < in_min) x = in_min;
     return (x-in_min)*(out_max-out_min) / (in_max-in_min)+out_min;
 };
 
@@ -68,21 +69,23 @@ void Backend::read_telemetry() {
         m_udpSocket = new QUdpSocket(this);
         
         connect(m_udpSocket, &QUdpSocket::readyRead, this, [this]() {
+            QNetworkDatagram datagram;
             while (m_udpSocket->hasPendingDatagrams()) {
-                QNetworkDatagram datagram = m_udpSocket->receiveDatagram();
-                if (datagram.data().size() >= static_cast<qint64>(sizeof(TelemetryPacket))) {
-                    TelemetryPacket packet;
-                    memcpy(&packet, datagram.data().constData(), sizeof(TelemetryPacket));
-                    
-                    std::cout << "--- Telemetry In --- \n"
-                              << "Speed (km/h): " << packet.speed_kmh << "\n"
-                              << "Brake Input:  " << packet.brake_input << "\n"
-                              << "Slip:         " << packet.wheel_slip[0] << "\n"
-                              << "-------------------- \n";
-                    
-                    UsbPacket ret = parse_telemetry(packet);
-                    m_serial->sendData(ret);
-                }
+                datagram = m_udpSocket->receiveDatagram();
+            }
+            
+            if (datagram.isValid() && datagram.data().size() >= static_cast<qint64>(sizeof(TelemetryPacket))) {
+                TelemetryPacket packet;
+                memcpy(&packet, datagram.data().constData(), sizeof(TelemetryPacket));
+                
+                std::cout << "--- Telemetry In --- \n"
+                          << "Speed (km/h): " << packet.speed_kmh << "\n"
+                          << "Brake Input:  " << packet.brake_input << "\n"
+                          << "Slip:         " << packet.wheel_slip[0] << "\n"
+                          << "-------------------- \n";
+                
+                UsbPacket ret = parse_telemetry(packet);
+                m_serial->sendData(ret);
             }
         });
     }
@@ -95,17 +98,4 @@ void Backend::read_telemetry() {
 
     m_udpSocket->writeDatagram(reinterpret_cast<const char*>(&hb), sizeof(hb), QHostAddress::LocalHost, 9996);
     std::cout << "Handshake sent to localhost:9996" << std::endl;
-}
-
-void Backend::unsubscribe() {
-    if (m_udpSocket) {
-        struct Handshake {
-            int identifier;
-            int version;
-            int operationId;
-        } hb = {1, 1, 2};
-
-        m_udpSocket->writeDatagram(reinterpret_cast<const char*>(&hb), sizeof(hb), QHostAddress::LocalHost, 9996);
-        std::cout << "Unsubscribe packet sent to localhost:9996" << std::endl;
-    }
 }

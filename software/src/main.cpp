@@ -28,6 +28,5 @@ int main(int argc, char *argv[])
     engine.load(url);
     app.exec();
 
-    backend->unsubscribe();
     return 0;
 }

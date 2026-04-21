@@ -6,14 +6,7 @@
 #include <QUdpSocket>
 #include "ISerial.h"
 
-struct TelemetryPacket {
-    float speed_kmh;
-    float brake_input;
-    float wheel_slip[4];
-};
-
-
-
+#include "protocol.h"
 class Backend : public QObject {
     Q_OBJECT
     Q_PROPERTY(double absThreshold READ absThreshold WRITE setAbsThreshold NOTIFY absThresholdChanged)
@@ -32,7 +25,6 @@ public:
     UsbPacket parse_telemetry(TelemetryPacket telemetry);
     void read_telemetry();
 
-    void unsubscribe();
 signals:
     void absThresholdChanged();
     void rumbleIntensityChanged();
